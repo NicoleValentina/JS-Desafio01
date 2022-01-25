@@ -1,4 +1,4 @@
-let precio = 0;
+let precio = 0
 let productos = parseInt(
   prompt(
     "Selecciona un producto \n1. Polerón \n2. Pantalón \n3. Beanie \n4. Banano", "Ingresa una opción del 1 al 4"
@@ -27,11 +27,7 @@ switch (productos) {
     break;
 }
 
-if (precio == 0) {
-  alert("¿Estás vitrineando? Vuelve pronto, te esperamos ✌️");
-
-} else if (precio > 0) {
-
+function checkout(){
   let pago = prompt("Ingresa tu pago de $" + precio);
 
   while (pago < precio) {
@@ -50,4 +46,11 @@ if (precio == 0) {
         ", ¡muchas gracias por tu compra! 🙌"
     );
   }
+}
+
+if (precio == 0) {
+  alert("¿Estás vitrineando? Vuelve pronto, te esperamos ✌️");
+
+} else if (precio > 0) {
+ checkout();
 }
