@@ -1,0 +1,70 @@
+*{
+    margin: 0;
+}
+
+:root{
+    font-size: 12px;
+    --colorPrim: #000;
+    --GrisSecu: #666;
+    --colorBase: #fff
+}
+
+h1, h3{
+    font-family: roc-grotesk-extrawide, sans-serif;
+}
+
+
+h2, h4, h5, h6, p{
+    font-family: roc-grotesk, sans-serif;
+    font-weight: 300;
+    color: var(--colorPrim);
+}
+
+h1{
+    font-size: 3rem;
+}
+
+h2{
+    font-size: 1.5rem;
+    color: var(--GrisSecu);
+    margin-bottom: 3%;
+}
+
+h3, h4{
+    font-size: 2rem;
+}
+
+p{
+    font-size: 1rem;
+}
+
+main{
+    margin: 3% 2%;
+}
+
+.contenedor{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.columna{
+    width: 25%;
+}
+
+.producto{
+    width: 100%;
+    margin-bottom: 2%;
+}
+
+button{
+    font-family: roc-grotesk, sans-serif;
+    background-color: var(--colorBase);
+    border: 1px solid var(--colorPrim);
+    padding: 7px 15px;
+    margin-top: 3%;
+}
+
+button:hover{
+    background-color: var(--colorPrim);
+    color: var(--colorBase);
+}
