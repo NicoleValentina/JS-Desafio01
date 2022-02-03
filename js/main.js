@@ -5,6 +5,13 @@ const inventario = [
   { nombre: "Banano", precio: 15000, stock: 10 },
 ];
 
+//Mostrar detalle de cada producto (por consola)
+inventario.forEach((prod) => {
+  console.log(prod);
+})
+
+
+//Selección de productos
 let productos = parseInt(
   prompt(
     "Selecciona un producto \n1. Polerón \n2. Pantalón \n3. Beanie \n4. Banano",
@@ -12,33 +19,44 @@ let productos = parseInt(
   )
 );
 
-let precio = 0;
-let nombre = 0;
-let stock = 0;
+let precio = 0, nombre = 0, stock = 0, cantidad = 0
 
 switch (productos) {
   case 1:
     nombre = inventario[0].nombre;
     precio = inventario[0].precio;
     stock = inventario[0].stock;
+    cantidad =  prompt(
+      "Ingresa la cantidad de " + nombre + " que deseas" +
+        "\nHay " + stock + " disponibles"
+    )
     break;
 
   case 2:
     nombre = inventario[1].nombre;
     precio = inventario[1].precio;
     stock = inventario[1].stock;
+    cantidad =  prompt(
+      "Ingresa la cantidad de " + nombre + " que deseas" +
+        "\nHay " + stock + " disponibles")
     break;
 
   case 3:
     nombre = inventario[2].nombre;
     precio = inventario[2].precio;
     stock = inventario[2].stock;
+    cantidad =  prompt(
+      "Ingresa la cantidad de " + nombre + " que deseas" +
+        "\nHay " + stock + " disponibles")
     break;
 
   case 4:
     nombre = inventario[3].nombre;
     precio = inventario[3].precio;
     stock = inventario[3].stock;
+    cantidad =  prompt(
+      "Ingresa la cantidad de " + nombre + " que deseas" +
+        "\nHay " + stock + " disponibles")
     break;
 
   default:
@@ -46,12 +64,6 @@ switch (productos) {
     break;
 }
 
-let cantidad = parseInt(
-  prompt(
-    "Ingresa la cantidad de " + nombre + " que deseas" +
-      "\nHay " + stock + " disponibles"
-  )
-);
 
 //Función para realizar pago
 function checkout() {
@@ -101,3 +113,4 @@ if (precio == 0) {
 } else if (precio > 0) {
   checkout();
 }
+
