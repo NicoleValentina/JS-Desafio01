@@ -9,7 +9,7 @@ const inventario = [
 let contenedor = document.getElementById("contenedor")
 
 //Creación de los divs para meter la info de producto
-for (let index = 0; index < inventario.length; index++) {
+for (let i = 0; i < inventario.length; i++) {
   let contenedorProducto = document.createElement("div")
   contenedor.appendChild(contenedorProducto)
   contenedorProducto.className = "colProd"
@@ -25,10 +25,25 @@ function datosProducto(i) {
   <h3>${inventario[i].nombre}</h3>
   <h4>$${inventario[i].precio}</h4>
   <p>Hay ${inventario[i].stock} en stock</p>
-  <button>Agregar al carro</button>`
-
+  <button class="agregarCarro">Agregar al carro</button>
+  <div class="cantidad"></div>`
 }
 
-for (let index = 0; index < inventario.length; index++) {
-  datosProducto(index) 
+//Iterador para ir llenando los datos de productos
+for (let i = 0; i < inventario.length; i++) {
+  datosProducto(i) 
 }
+
+
+//Evento agregar al carro
+let agregarCarro = document.querySelectorAll(".agregarCarro"), cantidadCarro = document.querySelectorAll(".cantidad")
+
+for (let i = 0; i < agregarCarro.length; i++){
+  agregarCarro[i].onclick = () =>{
+    agregarCarro[i].remove()
+    cantidadCarro[i].innerHTML = `<p>Selecciona la cantidad</p>
+    <input type="number" name="cantidad"></input>
+    <button id="agregar">Agregar</button>`
+  }
+}
+

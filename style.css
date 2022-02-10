@@ -68,3 +68,22 @@ button:hover{
     background-color: var(--colorPrim);
     color: var(--colorBase);
 }
+
+.cantidad{
+    margin-top: 5%;
+}
+
+[type=number]{
+    font-family: roc-grotesk, sans-serif;
+    font-size: 1.2rem;
+    padding: 0 5%;
+    height: 2.6rem;
+    position: relative;
+    top: 1px;
+    border: 1px solid var(--colorPrim);
+}
+
+[type=number]:focus-visible{
+    outline: 1px solid var(--colorPrim);
+}
+
