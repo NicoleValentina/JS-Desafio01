@@ -25,25 +25,50 @@ function datosProducto(i) {
   <h3>${inventario[i].nombre}</h3>
   <h4>$${inventario[i].precio}</h4>
   <p>Hay ${inventario[i].stock} en stock</p>
-  <button class="agregarCarro">Agregar al carro</button>
-  <div class="cantidad"></div>`
+  <button class="agregarCarro">Agregar al carro</button>`
+
+  //Módulo oculto para añadir cantidad
+  let cantidad = document.createElement("div")
+  cantidad.innerHTML = `<p>Selecciona la cantidad</p>
+  <input type="number" name="cantidad"></input>
+  <button class="agregar">Agregar</button> 
+  <span class="material-icons cancelar">
+  clear
+  </span>`
+
+  producto[i].appendChild(cantidad)
+  cantidad.className = "cantidad"
+  cantidad.style.display = "none"
+
+  //Evento agregar al carro + cantidad
+  let agregarCarro = document.querySelectorAll(".agregarCarro"),selectCantidad = document.querySelectorAll(".cantidad"), agregarCantidad = document.querySelectorAll(".agregar"),
+  cancelar = document.querySelectorAll(".material-icons.cancelar"), inputCantidad = document.querySelectorAll("[type=number]")
+  
+  console.log(selectCantidad);
+
+  for (let i = 0; i < agregarCarro.length; i++){
+    agregarCarro[i].onclick = () =>{
+      agregarCarro[i].style.display = "none"
+      selectCantidad[i].style.display = "inline-block"
+    }
+
+    agregarCantidad[i].onclick = () =>{
+      agregarCantidad[i].innerHTML = "Producto agregado"
+      }
+  
+    agregarCantidad[i].onmouseleave = () =>{
+      agregarCantidad[i].innerText = "Agregar"
+    }
+
+    cancelar[i].onclick = () =>{
+      agregarCarro[i].style.display = "inline-block"
+      selectCantidad[i].style.display = "none"
+    }
+  }
 }
 
 //Iterador para ir llenando los datos de productos
 for (let i = 0; i < inventario.length; i++) {
   datosProducto(i) 
-}
-
-
-//Evento agregar al carro
-let agregarCarro = document.querySelectorAll(".agregarCarro"), cantidadCarro = document.querySelectorAll(".cantidad")
-
-for (let i = 0; i < agregarCarro.length; i++){
-  agregarCarro[i].onclick = () =>{
-    agregarCarro[i].remove()
-    cantidadCarro[i].innerHTML = `<p>Selecciona la cantidad</p>
-    <input type="number" name="cantidad"></input>
-    <button id="agregar">Agregar</button>`
-  }
 }
 

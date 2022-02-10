@@ -87,3 +87,7 @@ button:hover{
     outline: 1px solid var(--colorPrim);
 }
 
+.cancelar{
+    position: relative;
+    top: 0.7rem;
+}
