@@ -5,27 +5,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!--CSS-->
-    <link rel="stylesheet" href="style.css">
-
     <!--Typo-->
     <link rel="stylesheet" href="https://use.typekit.net/jet7qle.css">
 
     <!--Icons-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
+
+     <!--CSS-->
+     <link rel="stylesheet" href="style.css">
       
     <title>Tienda</title>
 </head>
 
 <body>
+    <header>
+        <span class="material-icons carrito" id="carrito">
+            shopping_cart
+        </span>
+    </header>
     <main>
         <h1>Productos</h1>
         <h2>Lo mejor de lo mejor para ti</h2>
 
+        <section class="descuento" id="descuento">
+            <h3>Ingresa tu email y obtén 10% de descuento</h3>
+            <input type="email" name="email" id="emailDesc">
+            <button type="submit" id="guardarEmail">Ingresar</button>
+        </section>
+
         <section class="contenedor" id="contenedor">
             <!--Acá van los productos-->
         </section>
+
+       
     </main>
 
 

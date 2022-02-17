@@ -38,8 +38,26 @@ p{
     font-size: 1rem;
 }
 
+header{
+    width: 100%;
+    height: 5rem;
+    background: var(--colorBase);
+    border-bottom: 1px solid var(--colorPrim);
+    position: fixed;
+    top: 0;
+}
+
+.carrito{
+    position: relative;
+    top: 1rem;
+    right: 1rem;
+    float: right;
+    font-size: 3rem;
+    cursor: pointer;
+}
+
 main{
-    margin: 3% 2%;
+    margin: 7% 2%;
 }
 
 .contenedor{
@@ -56,7 +74,7 @@ main{
     margin-bottom: 2%;
 }
 
-button{
+.colProd button{
     font-family: roc-grotesk, sans-serif;
     background-color: var(--colorBase);
     border: 1px solid var(--colorPrim);
@@ -64,30 +82,108 @@ button{
     margin-top: 3%;
 }
 
-button:hover{
+.colProd button:hover{
     background-color: var(--colorPrim);
     color: var(--colorBase);
+    cursor: pointer;
 }
 
 .cantidad{
     margin-top: 5%;
 }
 
-[type=number]{
+[type=number], [type=email]{
     font-family: roc-grotesk, sans-serif;
     font-size: 1.2rem;
-    padding: 0 5%;
+    padding: 0 3%;
     height: 2.6rem;
     position: relative;
     top: 1px;
     border: 1px solid var(--colorPrim);
 }
 
-[type=number]:focus-visible{
+[type=email]{
+    padding: 0 1%;
+}
+
+[type=number]:focus-visible, [type=email]:focus-visible{
     outline: 1px solid var(--colorPrim);
 }
 
 .cancelar{
     position: relative;
     top: 0.7rem;
+}
+
+
+/*Banner descuento*/
+.descuento{
+    margin: 3% 0;
+    padding: 2%;
+    background: var(--colorPrim);
+    display: flex;
+    justify-content: space-around;
+}
+
+.descuento h3{
+    font-size: 2rem;
+    display: inline-block;
+    color: var(--colorBase);
+}
+
+.descuento button {
+    color: var(--colorBase);
+    font-family: roc-grotesk, sans-serif;
+    background-color: var(--colorPrim);
+    border: 1px solid var(--colorBase);
+    padding: 7px 15px;
+}
+
+.descuento button:hover{
+    cursor: pointer;
+}
+
+
+/*Carro de compras*/
+.headerCarro{
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.headerCarro h3{
+    font-size: 1.5rem;
+}
+
+.detalleCarro {
+    width: 30vw;
+    height: 100vh;
+    background-color: var(--colorBase);
+    border-left: 1px solid var(--colorPrim);
+    position: fixed;
+    top: 0;
+    right: -31vw;
+}
+
+.cerrar{
+    float: right;
+    position: relative;
+    top: 2px;
+    right: 1rem;
+    cursor: pointer;
+}
+
+.itemCarro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.itemCarro p{
+    font-size: 1.2rem;
+}
+
+img.imgProdCarro{
+    height: 75px;
 }
