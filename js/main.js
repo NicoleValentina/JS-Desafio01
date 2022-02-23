@@ -18,6 +18,7 @@ for (let i = 0; i < inventario.length; i++) {
 
 let producto = document.getElementsByClassName("colProd")
 
+
 //Función para llamar y estructurar los datos de los productos
 function datosProducto(i) {
   producto[i].innerHTML = `
@@ -46,6 +47,7 @@ for (let i = 0; i < inventario.length; i++) {
   datosProducto(i) 
 }
 
+let carroCompras = []
 
 //Mostrar y ocultar carro de compras
 let iconoCarro = document.getElementById("carrito"), detalleCarro = document.createElement("div")
@@ -73,15 +75,17 @@ cerrarCarro.onclick = () =>{
 }
 
 
+
+
 //Función agregar al carro + cantidad
 let agregarCarro = document.querySelectorAll(".agregarCarro"),selectCantidad = document.querySelectorAll(".cantidad"), agregarCantidad = document.querySelectorAll(".agregar"),
 cancelar = document.querySelectorAll(".material-icons.cancelar"), inputCantidad = document.querySelectorAll("[type=number]")
 
-let carroCompras = []
 
 let contProdCarro = document.getElementById("prodCarro") 
 
 function armarCarro (i) {
+
     let totalProd = inventario[i].precio * parseInt(inputCantidad[i].value)
 
     let filaProdCarro = document.createElement("div")
@@ -97,8 +101,10 @@ function armarCarro (i) {
 } 
 
 
+
 //Funcionallidades de los eventos del botón agregar
 function btnCarro (i){
+
   agregarCarro[i].onclick = () =>{
     agregarCarro[i].style.display = "none"
     selectCantidad[i].style.display = "inline-block"
@@ -111,6 +117,7 @@ function btnCarro (i){
     inventario[i]["total"] = inventario[i].precio * parseInt(inputCantidad[i].value)
     carroCompras.push(inventario[i]) 
     localStorage.setItem('Carro', JSON.stringify(carroCompras))
+  
   }
 
   agregarCantidad[i].onmouseleave = () =>{
@@ -132,8 +139,14 @@ for (let i = 0; i < agregarCarro.length; i++){
 //Email descuento 
 let emailDescuento = document.getElementById("emailDesc"), guardarEmail = document.getElementById("guardarEmail")
 
+
+function comprobarEmail () {
+  emailDescuento.value == localStorage.getItem("Email cliente") ? guardarEmail.innerText = "Ya ingresaste este correo 😥" : guardarEmail.innerText = "Tu código es COMPRA10%"
+}
+
 guardarEmail.onclick = () =>{
+  comprobarEmail()
   emailDescuento.style.display = "none"
   localStorage.setItem("Email cliente", emailDescuento.value)
-  guardarEmail.innerText = "Tu código es COMPRA10%"
 }
+
