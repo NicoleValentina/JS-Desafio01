@@ -121,7 +121,6 @@ function btnCarro (i){
     
     Toastify({
       text: "😎 Producto agregado al carro",
-      className: "info",
       gravity: "bottom",
       className: "prodAgregado",
       style: {
