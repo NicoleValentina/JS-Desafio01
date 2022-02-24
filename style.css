@@ -187,3 +187,10 @@ main{
 img.imgProdCarro{
     height: 75px;
 }
+
+/*Toastify*/
+.prodAgregado{
+    font-family: roc-grotesk, sans-serif;
+    font-weight: 300;
+    font-size: 1.2rem;
+}
