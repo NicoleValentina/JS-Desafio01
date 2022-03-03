@@ -1,157 +1,188 @@
-//Datos de los productos
-const inventario = [
-  { nombre: "Polerón", precio: 20.000, stock: 10, imagen: "media/poleron.jpg", id:01},
-  { nombre: "Pantalón", precio: 25.000, stock: 15, imagen: "media/pantalon.jpg", id:02},
-  { nombre: "Beanie", precio: 10.000, stock: 8, imagen: "media/beanie.jpg", id:03 },
-  { nombre: "Banano", precio: 15.000, stock: 10, imagen: "media/banano.jpg", id:04 },
-];
-
+let carroCompras = [];
 
 let contenedor = document.getElementById("contenedor")
 
-//Creación de los divs para meter la info de producto
-for (let i = 0; i < inventario.length; i++) {
-  let contenedorProducto = document.createElement("div")
-  contenedor.appendChild(contenedorProducto)
-  contenedorProducto.className = "colProd"
+//Llamar productos
+async function productos() {
+  const respuesta = await fetch("./js/productos.json")
+  const productos = await respuesta.json()
+
+  productos.forEach((prod) => {
+    let { imagen, nombre, precio, stock, id } = prod
+    let contenedorProd = document.createElement("div")
+    contenedorProd.className = "colProd"
+    contenedorProd.innerHTML += `
+           <img class="producto" src=${imagen}>
+           <h3>${nombre}</h3>   
+           <h4>${numeral(precio).format("($00.000)")}</h4>
+           <p>Hay ${stock} en stock</p>
+           <button class="agregarCarro" id="agregar${id}">Agregar al carro</button>`
+
+    contenedor.appendChild(contenedorProd);
+
+    let agregarProd = document.getElementById(`agregar${id}`)
+
+    agregarProd.onclick = () => {
+      agregarCarro(id)
+
+      Toastify({
+        text: "😎 Producto agregado al carro",
+        gravity: "bottom",
+        className: "toast",
+        style: {
+          background: "#00b09b",
+        },
+      }).showToast();
+    };
+  });
 }
 
-let producto = document.getElementsByClassName("colProd")
+productos()
 
+//Abrir y cerrar carro
+let iconoCarro = document.getElementById("carrito"),
+  detalleCarro = document.createElement("div")
 
-//Función para llamar y estructurar los datos de los productos
-function datosProducto(i) {
-
-  producto[i].innerHTML = `
-  <img class="producto" src="${inventario[i].imagen}" alt=${inventario[i].nombre}>
-  <h3>${inventario[i].nombre}</h3>
-  <h4>${numeral(inventario[i].precio).format('($ 00.000)')}</h4>
-  <p>Hay ${inventario[i].stock} en stock</p>
-  <button class="agregarCarro">Agregar al carro</button>`
-
-  //Módulo oculto para añadir cantidad
-  let cantidad = document.createElement("div")
-  cantidad.innerHTML = `<p>Selecciona la cantidad</p>
-  <input type="number" name="cantidad" value="0"></input>
-  <button class="agregar">Agregar</button> 
-  <span class="material-icons cancelar">
-  clear
-  </span>`
-
-  producto[i].appendChild(cantidad)
-  cantidad.className = "cantidad"
-  cantidad.style.display = "none"
-}
-
-//Iterador para ir llenando los datos de productos
-for (let i = 0; i < inventario.length; i++) {
-  datosProducto(i) 
-}
-
-let carroCompras = []
-
-
-//Mostrar y ocultar carro de compras
-let iconoCarro = document.getElementById("carrito"), detalleCarro = document.createElement("div")
-
-document.body.append(detalleCarro)
-
+document.body.append(detalleCarro);
 detalleCarro.className = "detalleCarro"
 detalleCarro.innerHTML = ` 
-<div class="headerCarro">
-<h3>Carro de compras</h3>
-<span class="material-icons cerrar" id="cerrarCarro">
-close
-</span></div>
-<div id="prodCarro"></div>
+    <div class="headerCarro">
+    <h3>Carro de compras</h3>
+    <span class="material-icons cerrar" id="cerrarCarro">
+    close
+    </span></div>
+    <div id="prodCarro"></div>
 `
 
-iconoCarro.onclick = () =>{
+iconoCarro.onclick = () => {
   detalleCarro.style.right = "0"
 }
 
 let cerrarCarro = document.getElementById("cerrarCarro")
 
-cerrarCarro.onclick = () =>{
+cerrarCarro.onclick = () => {
   detalleCarro.style.right = "-31vw"
 }
 
+let contProdCarro = document.getElementById("prodCarro");
 
 
+//Agregar prod al carro
+async function agregarCarro(id) {
+  const respuesta = await fetch("./js/productos.json")
+  const productos = await respuesta.json()
 
-//Función agregar al carro + cantidad
-let agregarCarro = document.querySelectorAll(".agregarCarro"),selectCantidad = document.querySelectorAll(".cantidad"), agregarCantidad = document.querySelectorAll(".agregar"),
-cancelar = document.querySelectorAll(".material-icons.cancelar"), inputCantidad = document.querySelectorAll("[type=number]")
+  let prodRepetido = carroCompras.find((buscar) => buscar.id == id)
 
+  if (prodRepetido) {
+    prodRepetido.cantidad = parseInt(prodRepetido.cantidad) + 1
 
-let contProdCarro = document.getElementById("prodCarro") 
+    document.getElementById(`cantProd${prodRepetido.id}`).value = parseInt(prodRepetido.cantidad)
 
-function armarCarro (i) {
-   
-    let totalProd = inventario[i].precio * parseInt(inputCantidad[i].value),
-    filaProdCarro = document.createElement("div")
+    document.getElementById(`precio${prodRepetido.id}`).innerHTML = 
+        `<p id="precio${prodRepetido.id}">${numeral(prodRepetido.precio * prodRepetido.cantidad).format("($00.000)")}</p> `
+    
+  } else {
 
+    let agregarProd = productos.find((elemento) => elemento.id == id);
+    carroCompras.push(agregarProd)
+
+    let filaProdCarro = document.createElement("div")
     filaProdCarro.className = "itemCarro"
     filaProdCarro.innerHTML = `
-      <img class="imgProdCarro" src="${inventario[i].imagen}" alt=${inventario[i].nombre}>
-      <p>${inventario[i].nombre}</p>
-      <p id="cantidad${inventario[i].id}">${parseInt(inputCantidad[i].value)}</p>
-      <p>${numeral(totalProd).format('($ 00.000)')}</p>
-      `
+            <img class="imgProdCarro" src="${agregarProd.imagen}" alt=${
+            agregarProd.nombre}>
+            <p>${agregarProd.nombre}</p>
+            <div id="cantidad">
+                <input type="button" name="sumaresta" id="restar${agregarProd.id}" value="–">
+                <input type="number" name="cantidad" value="1" id="cantProd${agregarProd.id}">
+                <input type="button" name="sumaresta" id="sumar${agregarProd.id
+                }" value="+">
+              </div>
+              <p id="precio${agregarProd.id}">${numeral(
+              agregarProd.precio * agregarProd.cantidad).format("($00.000)")}</p> 
+              <span class="material-icons cerrar" id="btnEleminar${agregarProd.id}">
+              close
+              </span>`
+
     contProdCarro.appendChild(filaProdCarro)
-} 
 
+    //Sumar y restar en Carrito
+    let agregarCant = document.getElementById(`sumar${agregarProd.id}`),
+      restarCant = document.getElementById(`restar${agregarProd.id}`),
+      inputCantidad = document.getElementById(`cantProd${agregarProd.id}`)
 
+    agregarCant.onclick = () => {
+      let agregarProd = productos.find((elemento) => elemento.id == id)
+      carroCompras.push(agregarProd)
 
-//Funcionallidades de los eventos del botón agregar
-function btnCarro (i){
+      let cantidad = inputCantidad.value
+      let sumarCant = parseInt(cantidad) + 1
 
-  agregarCarro[i].onclick = () =>{
-    agregarCarro[i].style.display = "none"
-    selectCantidad[i].style.display = "inline-block"
-  }
+      inputCantidad.value = sumarCant
 
-  agregarCantidad[i].onclick = () =>{
-    inventario[i]["cantidad"] = parseInt(inputCantidad[i].value)
-    inventario[i]["total"] = inventario[i].precio * parseInt (inputCantidad[i].value)
-    carroCompras.push(inventario[i]) 
+      document.getElementById(`precio${agregarProd.id}`).innerHTML = 
+          `<p id="precio${agregarProd.id}">${numeral(agregarProd.precio * inputCantidad.value).format("($00.000)")}</p> `
+    }
 
-    armarCarro(i)
-    localStorage.setItem('Carro', JSON.stringify(carroCompras))
-    
-    Toastify({
-      text: "😎 Producto agregado al carro",
-      gravity: "bottom",
-      className: "prodAgregado",
-      style: {
-        background: "#00b09b",
+    restarCant.onclick = () => {
+      carroCompras = carroCompras.filter((item) => item.id != agregarProd.id)
+
+      let cantidad = inputCantidad.value
+      let restarCant = parseInt(cantidad) - 1
+
+      inputCantidad.value = restarCant
+
+      document.getElementById(`precio${agregarProd.id}`).innerHTML =
+           `<p id="precio${agregarProd.id}">${numeral(agregarProd.precio * inputCantidad.value).format("($00.000)")}</p> `
+
+      if (inputCantidad.value == 0) {
+        eliminarProd.parentElement.remove()
+        
+        Toastify({
+          text: "👻 Producto eliminado del carro",
+          gravity: "bottom",
+          className: "toast",
+          style: {
+            background: "#ff8585",
+          },
+        }).showToast();
       }
-    }).showToast();
+    }
+
+
+    //Eliminar Productos
+    let eliminarProd = document.getElementById(`btnEleminar${agregarProd.id}`)
+
+    eliminarProd.onclick = () => {
+      eliminarProd.parentElement.remove()
+      carroCompras = carroCompras.filter((item) => item.id != agregarProd.id);
+
+      Toastify({
+        text: "👻 Producto eliminado del carro",
+        gravity: "bottom",
+        className: "toast",
+        style: {
+          background: "#ff8585",
+        },
+      }).showToast()
+      }
   }
-
-
-  cancelar[i].onclick = () =>{
-    agregarCarro[i].style.display = "inline-block"
-    selectCantidad[i].style.display = "none"  
-  }  
+  localStorage.setItem("carrito", JSON.stringify(carroCompras))
 }
 
-//Iterar funcionalidad por cada botón agregar que hay
-for (let i = 0; i < agregarCarro.length; i++){
-    btnCarro(i)
+//Email descuento
+let emailDescuento = document.getElementById("emailDesc"),
+  guardarEmail = document.getElementById("guardarEmail")
+
+function comprobarEmail() {
+  emailDescuento.value == localStorage.getItem("Email cliente")
+    ? (guardarEmail.innerText = "Ya ingresaste este correo 😥")
+    : (guardarEmail.innerText = "Tu código es COMPRA10%")
 }
 
-//Email descuento 
-let emailDescuento = document.getElementById("emailDesc"), guardarEmail = document.getElementById("guardarEmail")
-
-
-function comprobarEmail () {
-  emailDescuento.value == localStorage.getItem("Email cliente") ? guardarEmail.innerText = "Ya ingresaste este correo 😥" : guardarEmail.innerText = "Tu código es COMPRA10%"
-}
-
-guardarEmail.onclick = () =>{
-  comprobarEmail()
+guardarEmail.onclick = () => {
+  comprobarEmail();
   emailDescuento.style.display = "none"
   localStorage.setItem("Email cliente", emailDescuento.value)
 }
-
