@@ -1,15 +1,16 @@
 let carroCompras = [];
 
-let contenedor = document.getElementById("contenedor")
+let contenedor = document.getElementById("contenedor");
 
-//Llamar productos
+//LLamar productos
 async function productos() {
   const respuesta = await fetch("./js/productos.json")
   const productos = await respuesta.json()
 
   productos.forEach((prod) => {
-    let { imagen, nombre, precio, stock, id } = prod
-    let contenedorProd = document.createElement("div")
+    let { imagen, nombre, precio, stock, id } = prod, 
+    contenedorProd = document.createElement("div")
+    
     contenedorProd.className = "colProd"
     contenedorProd.innerHTML += `
            <img class="producto" src=${imagen}>
@@ -18,12 +19,12 @@ async function productos() {
            <p>Hay ${stock} en stock</p>
            <button class="agregarCarro" id="agregar${id}">Agregar al carro</button>`
 
-    contenedor.appendChild(contenedorProd);
+    contenedor.appendChild(contenedorProd)
 
     let agregarProd = document.getElementById(`agregar${id}`)
 
     agregarProd.onclick = () => {
-      agregarCarro(id)
+      agregarCarro(id);
 
       Toastify({
         text: "😎 Producto agregado al carro",
@@ -37,14 +38,13 @@ async function productos() {
   });
 }
 
-productos()
+productos();
 
 //Abrir y cerrar carro
 let iconoCarro = document.getElementById("carrito"),
-  detalleCarro = document.createElement("div")
-
+  detalleCarro = document.createElement("div");
 document.body.append(detalleCarro);
-detalleCarro.className = "detalleCarro"
+detalleCarro.className = "detalleCarro";
 detalleCarro.innerHTML = ` 
     <div class="headerCarro">
     <h3>Carro de compras</h3>
@@ -52,111 +52,129 @@ detalleCarro.innerHTML = `
     close
     </span></div>
     <div id="prodCarro"></div>
-`
+`;
 
 iconoCarro.onclick = () => {
-  detalleCarro.style.right = "0"
-}
+  detalleCarro.style.right = "0";
+};
 
-let cerrarCarro = document.getElementById("cerrarCarro")
+let cerrarCarro = document.getElementById("cerrarCarro");
 
 cerrarCarro.onclick = () => {
-  detalleCarro.style.right = "-31vw"
-}
-
-let contProdCarro = document.getElementById("prodCarro");
+  detalleCarro.style.right = "-100vw";
+};
 
 
-//Agregar prod al carro
+//Crear elementos para info del carro
+let contProdCarro = document.getElementById("prodCarro"), carroVacio = document.createElement("p"),
+  totalCompra = document.createElement("div")
+
+
+carroVacio.className = "carroVacio"
+totalCompra.className = "total"
+
+contProdCarro.appendChild(carroVacio),
+  detalleCarro.appendChild(totalCompra)
+
+
+//Agregar productos al carro
 async function agregarCarro(id) {
   const respuesta = await fetch("./js/productos.json")
   const productos = await respuesta.json()
 
-  let prodRepetido = carroCompras.find((buscar) => buscar.id == id)
-
+  let prodRepetido = carroCompras.find((buscar) => buscar.id == id);
+ 
   if (prodRepetido) {
     prodRepetido.cantidad = parseInt(prodRepetido.cantidad) + 1
 
-    document.getElementById(`cantProd${prodRepetido.id}`).value = parseInt(prodRepetido.cantidad)
+    document.getElementById(
+      `cantidad${prodRepetido.id}`
+    ).innerHTML = `<p id="cantidad${prodRepetido.id}">${prodRepetido.cantidad}</p>`
 
-    document.getElementById(`precio${prodRepetido.id}`).innerHTML = 
-        `<p id="precio${prodRepetido.id}">${numeral(prodRepetido.precio * prodRepetido.cantidad).format("($00.000)")}</p> `
-    
-  } else {
+    document.getElementById(
+      `precio${prodRepetido.id}`
+    ).innerHTML = `<p id="precio${prodRepetido.id}">${numeral(prodRepetido.precio * prodRepetido.cantidad).format("($00.000)")}</p> `
 
-    let agregarProd = productos.find((elemento) => elemento.id == id);
-    carroCompras.push(agregarProd)
+    carroVacio.style.display = "none"
+    totalCarro()
+  
 
-    let filaProdCarro = document.createElement("div")
-    filaProdCarro.className = "itemCarro"
-    filaProdCarro.innerHTML = `
-            <img class="imgProdCarro" src="${agregarProd.imagen}" alt=${
-            agregarProd.nombre}>
-            <p>${agregarProd.nombre}</p>
-            <div id="cantidad">
-                <input type="button" name="sumaresta" id="restar${agregarProd.id}" value="–">
-                <input type="number" name="cantidad" value="1" id="cantProd${agregarProd.id}">
-                <input type="button" name="sumaresta" id="sumar${agregarProd.id
-                }" value="+">
-              </div>
-              <p id="precio${agregarProd.id}">${numeral(
-              agregarProd.precio * agregarProd.cantidad).format("($00.000)")}</p> 
-              <span class="material-icons cerrar" id="btnEleminar${agregarProd.id}">
-              close
-              </span>`
+  //Límite stock
+  let btnAgregar = document.getElementById(`agregar${prodRepetido.id}`)
 
-    contProdCarro.appendChild(filaProdCarro)
-
-    //Sumar y restar en Carrito
-    let agregarCant = document.getElementById(`sumar${agregarProd.id}`),
-      restarCant = document.getElementById(`restar${agregarProd.id}`),
-      inputCantidad = document.getElementById(`cantProd${agregarProd.id}`)
-
-    agregarCant.onclick = () => {
-      let agregarProd = productos.find((elemento) => elemento.id == id)
-      carroCompras.push(agregarProd)
-
-      let cantidad = inputCantidad.value
-      let sumarCant = parseInt(cantidad) + 1
-
-      inputCantidad.value = sumarCant
-
-      document.getElementById(`precio${agregarProd.id}`).innerHTML = 
-          `<p id="precio${agregarProd.id}">${numeral(agregarProd.precio * inputCantidad.value).format("($00.000)")}</p> `
-    }
-
-    restarCant.onclick = () => {
-      carroCompras = carroCompras.filter((item) => item.id != agregarProd.id)
-
-      let cantidad = inputCantidad.value
-      let restarCant = parseInt(cantidad) - 1
-
-      inputCantidad.value = restarCant
-
-      document.getElementById(`precio${agregarProd.id}`).innerHTML =
-           `<p id="precio${agregarProd.id}">${numeral(agregarProd.precio * inputCantidad.value).format("($00.000)")}</p> `
-
-      if (inputCantidad.value == 0) {
-        eliminarProd.parentElement.remove()
-        
+     if (prodRepetido.cantidad == prodRepetido.stock) {
+      btnAgregar.style.pointerEvents = "none"
+      btnAgregar.innerText = "Sin stock"
+   
         Toastify({
-          text: "👻 Producto eliminado del carro",
+          text: "No hay más stock disponible",
           gravity: "bottom",
           className: "toast",
           style: {
             background: "#ff8585",
           },
-        }).showToast();
-      }
-    }
+        }).showToast()
+      }      
 
+  } else {
+    let agregarProd = productos.find((elemento) => elemento.id == id);
+    carroCompras.push(agregarProd)
 
-    //Eliminar Productos
-    let eliminarProd = document.getElementById(`btnEleminar${agregarProd.id}`)
+    carroVacio.style.display = "none"
+    totalCarro()
+    comprar()
+
+    let filaProdCarro = document.createElement("div");
+    filaProdCarro.className = "itemCarro";
+    filaProdCarro.innerHTML = `
+            <img class="imgProdCarro" src="${agregarProd.imagen}" alt=${agregarProd.nombre}>
+                      <p>${agregarProd.nombre}</p>
+                      <p id="cantidad${agregarProd.id}">${agregarProd.cantidad}</p>
+                      <p id="precio${agregarProd.id}">${numeral(agregarProd.precio * agregarProd.cantidad).format("($00.000)")}</p> 
+                      <span class="material-icons eliminar" id="btnEleminar${agregarProd.id}">
+              close
+              </span>
+                     `
+    contProdCarro.appendChild(filaProdCarro)
+  
+
+    //Eliminar productos
+    let eliminarProd = document.getElementById(`btnEleminar${agregarProd.id}`);
 
     eliminarProd.onclick = () => {
-      eliminarProd.parentElement.remove()
-      carroCompras = carroCompras.filter((item) => item.id != agregarProd.id);
+      if (agregarProd.cantidad == 1) {
+        eliminarProd.parentElement.remove();
+
+        carroCompras = carroCompras.filter((item) => item.id != agregarProd.id);
+
+        comprar()
+        vacio()
+        totalCarro()
+        
+        localStorage.setItem("carrito", JSON.stringify(carroCompras));
+
+      } else {
+        agregarProd.cantidad = agregarProd.cantidad - 1;
+
+        document.getElementById(
+          `cantidad${agregarProd.id}`
+        ).innerHTML = `<p id="cantidad${agregarProd.id}">${agregarProd.cantidad}</p>`;
+
+        document.getElementById(
+          `precio${agregarProd.id}`
+        ).innerHTML = `<p id="precio${agregarProd.id}">${numeral(agregarProd.precio * agregarProd.cantidad).format("($00.000)")}</p> `
+      
+       //Activar botón agregar productos
+        let btnAgregar = document.getElementById(`agregar${agregarProd.id}`)
+
+        agregarProd.cantidad < agregarProd.stock &&
+         (btnAgregar.style.pointerEvents="auto", 
+         btnAgregar.innerText = "Agregar al carro")
+        
+        
+        totalCarro()
+        localStorage.setItem("carrito", JSON.stringify(carroCompras));
+      }
 
       Toastify({
         text: "👻 Producto eliminado del carro",
@@ -165,24 +183,68 @@ async function agregarCarro(id) {
         style: {
           background: "#ff8585",
         },
-      }).showToast()
-      }
+      }).showToast();
+    };
   }
-  localStorage.setItem("carrito", JSON.stringify(carroCompras))
+
+  localStorage.setItem("carrito", JSON.stringify(carroCompras));
 }
+
+
+//Carro vacío
+function vacio() {
+  carroCompras.length == 0 && (
+    carroVacio.innerText = "No tienes productos en tu carrito ☹️",
+    carroVacio.style.display = "block"
+  )
+}
+vacio()
+
+
+
+//Total carro
+function totalCarro() {
+  let total = carroCompras.reduce((acc, prod) => acc + (prod.precio * prod.cantidad), 0)
+
+  totalCompra.innerHTML = `
+    <p class="precioTotal">TOTAL</p> <p class="valorTotal">${numeral(total).format("($00.000)")}</p>`
+
+  carroCompras.length == 0 ? totalCompra.style.display = "none" : totalCompra.style.display = "flex"
+
+  localStorage.setItem("total", total);
+
+  //contadorCarrito.innerText = carritoDeCompras.reduce((acc, el) => acc + el.cantidad, 0)  
+}
+
+
+// //Botón comprar
+let btnComprar = document.createElement("button")
+btnComprar.className = "comprar"
+btnComprar.innerHTML = `<a href="#">Proceder al pago <span class="material-icons">
+arrow_forward
+</span></a>`
+
+detalleCarro.appendChild(btnComprar)
+btnComprar.style.display="none"
+
+function comprar (){
+  carroCompras.length > 0 ? btnComprar.style.display="block" : btnComprar.style.display="none"
+}
+
 
 //Email descuento
 let emailDescuento = document.getElementById("emailDesc"),
-  guardarEmail = document.getElementById("guardarEmail")
+  guardarEmail = document.getElementById("guardarEmail");
 
 function comprobarEmail() {
   emailDescuento.value == localStorage.getItem("Email cliente")
     ? (guardarEmail.innerText = "Ya ingresaste este correo 😥")
-    : (guardarEmail.innerText = "Tu código es COMPRA10%")
+    : (guardarEmail.innerText = "Tu código es COMPRA10%");
 }
 
 guardarEmail.onclick = () => {
   comprobarEmail();
-  emailDescuento.style.display = "none"
-  localStorage.setItem("Email cliente", emailDescuento.value)
-}
+  emailDescuento.style.display = "none";
+  localStorage.setItem("Email cliente", emailDescuento.value);
+};
+

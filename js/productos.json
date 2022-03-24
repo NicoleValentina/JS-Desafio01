@@ -30,5 +30,37 @@
     "imagen": "media/banano.jpg",
     "id": "04",
     "cantidad": "1"
+  },
+  {
+    "nombre": "Peto",
+    "precio": "15.0",
+    "stock": "12",
+    "imagen": "media/peto.jpg",
+    "id": "05",
+    "cantidad": "1"
+  },
+  {
+    "nombre": "Bucket hat",
+    "precio": "10.0",
+    "stock": "5",
+    "imagen": "media/bucket.jpg",
+    "id": "06",
+    "cantidad": "1"
+  },
+  {
+    "nombre": "Bikers",
+    "precio": "12.0",
+    "stock": "15",
+    "imagen": "media/biker.jpg",
+    "id": "07",
+    "cantidad": "1"
+  },
+  {
+    "nombre": "Cortaviento",
+    "precio": "25.0",
+    "stock": "10",
+    "imagen": "media/cortaviento.jpg",
+    "id": "08",
+    "cantidad": "1"
   }
 ]
