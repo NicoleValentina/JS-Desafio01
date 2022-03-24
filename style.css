@@ -115,6 +115,13 @@ main{
     margin-top: 3%;
 }
 
+
+@media only screen and (max-width: 480px){
+    .colProd button{
+        font-size: 2rem;
+    }
+}
+
 .colProd button:hover{
     background-color: var(--colorPrim);
     color: var(--colorBase);
@@ -167,6 +174,12 @@ main{
     font-size: 2rem;
     display: inline-block;
     color: var(--colorBase);
+}
+
+@media only screen and (max-width: 480px){
+    .descuento h3{
+        font-size: 1.5rem;
+    }
 }
 
 .descuento button {
