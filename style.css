@@ -209,6 +209,7 @@ main{
 @media only screen and (max-width: 480px){
     .detalleCarro{
         width: 100vw;
+        right: -101vw;
     }
 }
 
