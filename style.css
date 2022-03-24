@@ -123,24 +123,6 @@ main{
 }
 
 
-[name=sumaresta]{
-    border: none;
-    background-color: #f2f2f2;
-    height: 25px;
-}
-
-
-[name=cantidad]{
-    width: 30px;
-    font-family: roc-grotesk, sans-serif;
-    font-size: 1.2rem;
-    border-radius: 0;
-    border: none;
-    background-color: var(--colorBase);
-    text-align: center;
-}
-
-
 [type=email]{
     font-family: roc-grotesk, sans-serif;
     font-size: 1.2rem;
@@ -221,6 +203,7 @@ main{
     right: -31vw;
     transition: all .75s ease-in-out;
     z-index: 20;
+    overflow-y: scroll;
 }
 
 @media only screen and (max-width: 480px){
@@ -228,7 +211,6 @@ main{
         width: 100vw;
     }
 }
-
 
 
 .cerrar{
